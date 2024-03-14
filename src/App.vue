@@ -1,23 +1,44 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from 'vue'
+const isMiniSidebar = ref(false)
+const sidebarItems = ref([
+  { id: 1, name: 'Inbox', icon: '📥' },
+  { id: 2, name: 'Drafts', icon: '📝' },
+  { id: 3, name: 'Sent', icon: '📤' },
+  { id: 4, name: 'Spam', icon: '🚫' },
+  { id: 5, name: 'Trash', icon: '🗑️' }
+])
+const activeItem = ref(1)
+function toggleSidebar() {
+  isMiniSidebar.value = !isMiniSidebar.value
+}
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+  <div :class="{ sidebar: true, 'min-sidebar': isMiniSidebar }">
+    <div class="sidebar-header">
+      <h2>Gmail</h2>
     </div>
-  </header>
+    <ul class="sidebar-nav">
+      <li
+        v-for="item in sidebarItems"
+        :key="item.id"
+        :class="{ active: activeItem === item.id }"
+        @click="changeActiveItem(item.id)"
+      >
+        <span v-if="!isMiniSidebar">{{ item.name }}</span>
+        <span v-else>{{ item.icon }}</span>
+      </li>
+    </ul>
+  </div>
 
-  <RouterView />
+  <div class="hamburger" @click="toggleSidebar">&#9776;</div>
+
+  <div style="margin-left: 250px; padding: 20px">
+    <!-- Main content here -->
+    <h1>Welcome to your Inbox</h1>
+    <p>This is where all your emails will appear.</p>
+  </div>
 </template>
 
 <style scoped>
@@ -26,60 +47,62 @@ header {
   max-height: 100vh;
 }
 
-.logo {
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #f0f0f0;
+  overflow-y: auto;
+  transition: width 0.3s;
+}
+
+.min-sidebar {
+  width: 80px;
+}
+
+.sidebar-header {
+  padding: 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav li {
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.sidebar-nav li:hover {
+  background-color: #e5e5e5;
+}
+
+.sidebar-nav li.active {
+  background-color: #ddd;
+}
+
+.hamburger {
   display: block;
-  margin: 0 auto 2rem;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  cursor: pointer;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+@media (max-width: 768px) {
+  .sidebar {
+    width: 80px;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+  .sidebar.min-sidebar {
+    width: 80px;
   }
 }
 </style>
