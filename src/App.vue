@@ -16,6 +16,7 @@ function toggleSidebar() {
 
 <template>
   <div :class="{ sidebar: true, 'min-sidebar': isMiniSidebar }">
+    <div class="hamburger" @click="toggleSidebar">&#9776;</div>
     <div class="sidebar-header">
       <h2>Gmail</h2>
     </div>
@@ -31,8 +32,6 @@ function toggleSidebar() {
       </li>
     </ul>
   </div>
-
-  <div class="hamburger" @click="toggleSidebar">&#9776;</div>
 
   <div style="margin-left: 250px; padding: 20px">
     <!-- Main content here -->
