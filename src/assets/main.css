@@ -1,9 +1,0 @@
-@import './base.css';
-
-.dark-mode {
-  /* Dark mode background color */
-  --background-color: #333333;
-
-  /* Dark mode text color */
-  --text-color: #ffffff;
-}
