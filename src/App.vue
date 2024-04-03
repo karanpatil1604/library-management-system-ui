@@ -8,6 +8,9 @@ import Navbar from '@/components/Navbar/NavBar.vue'
   <!-- logo + search-bar + Account -->
   <!-- Dashboard ========== SECTIONS ========== Books ========== Authors ========== Users ======  -->
   <!-- Navbar here -->
+  <main>
+    <RouterView></RouterView>
+  </main>
 </template>
 
 <style scoped></style>

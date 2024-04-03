@@ -13,11 +13,9 @@
   <div class="collapse navbar-collapse" id="navbarScroll">
     <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px">
       <li class="nav-item">
-        <div class="nav-link active" aria-current="page">Dashboard</div>
+        <RouterLink to="/" class="nav-link active">Dashboard</RouterLink>
       </li>
-      <li class="nav-item">
-        <div class="nav-link">Sections</div>
-      </li>
+      <li class="nav-item"><RouterLink to="/sections" class="nav-link">Sections</RouterLink></li>
       <li class="nav-item">
         <div class="nav-link">Books</div>
       </li>

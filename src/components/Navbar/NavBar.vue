@@ -12,8 +12,5 @@ import NavMenue from '@/components/Navbar/NavMenue.vue'
       </NavMenue>
     </div>
   </nav>
-  <main>
-    <router-view> This is a router view </router-view>
-  </main>
 </template>
 <style scoped></style>
