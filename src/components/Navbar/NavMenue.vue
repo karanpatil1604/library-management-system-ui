@@ -1,6 +1,6 @@
 <template>
   <button
-    class="navbar-toggler"
+    class="navbar-toggler col-2"
     type="button"
     data-bs-toggle="collapse"
     data-bs-target="#navbarScroll"
@@ -10,8 +10,11 @@
   >
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarScroll">
-    <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px">
+  <div
+    class="collapse navbar-collapse p-md-0 w-md-100 col-md-5 d-md-flex justify-content-md-end"
+    id="navbarScroll"
+  >
+    <ul class="navbar-nav my-md-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px">
       <li class="nav-item">
         <RouterLink to="/" class="nav-link active">Dashboard</RouterLink>
       </li>
@@ -41,6 +44,5 @@
         </ul>
       </li>
     </ul>
-    <slot></slot>
   </div>
 </template>

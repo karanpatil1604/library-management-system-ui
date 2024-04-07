@@ -1,6 +1,6 @@
 <template>
   <div class="card" aria-hidden="true">
-    <img src="../../assets//imgs/600x600.png" class="card-img-top w-100" />
+    <!-- <img src="../../assets//imgs/600x600.png" class="card-img-top w-100" /> -->
     <div class="card-body">
       <p class="card-text placeholder-glow">
         <span class="placeholder col-6"></span>

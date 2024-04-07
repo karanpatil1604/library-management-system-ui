@@ -4,7 +4,7 @@ import PlaceholderCard from '@/components/Placeholder/PlaceholderCard.vue'
 
 <template>
   <div class="p-2 m-2 w-100">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 gap-2">
+    <div class="row d-md-flex row-cols-md-4 gap-2">
       <PlaceholderCard></PlaceholderCard>
       <PlaceholderCard></PlaceholderCard>
       <PlaceholderCard></PlaceholderCard>
