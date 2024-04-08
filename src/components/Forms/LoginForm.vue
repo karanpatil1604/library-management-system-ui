@@ -1,5 +1,8 @@
 <template>
-  <div class="bg-warning rounded-1 p-4">
+  <div class="shadow rounded-1 p-4 mt-4 col-md-4 offset-md-4">
+    <div class="mt-2 gy-2">
+      <div class="text-center fw-semibold fs-2">Login</div>
+    </div>
     <form>
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Email address</label>
