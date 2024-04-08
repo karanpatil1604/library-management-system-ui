@@ -1,30 +1,35 @@
 <template>
   <div class="shadow rounded-1 p-4 mt-4 col-md-4 offset-md-4">
-    <div class="mt-2 gy-2">
+    <div class="mt-2">
       <div class="text-center fw-semibold fs-2">Login</div>
     </div>
-    <form>
-      <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
+    <hr />
+    <form class="fs-6">
+      <div class="form-floating mb-3">
         <input
           type="email"
           class="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
+          id="floatingInput"
+          placeholder="name@example.com"
         />
-        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        <label for="floatingInput">Email address</label>
       </div>
-      <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" />
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="password" placeholder="secure$9418" />
+        <label for="password">Password</label>
       </div>
-      <div class="mb-3 form-check">
+
+      <div class="mb-3 form-check ms-2">
         <input type="checkbox" class="form-check-input" id="exampleCheck1" checked />
-        <label class="form-check-label" for="exampleCheck1">Always sign in on this device</label>
+        <label class="form-check-label" for="exampleCheck1">Remember me</label>
       </div>
-      <div class="text-end">
-        <button type="submit" class="btn btn-subtle me-2">Cancel</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
+      <div class="mb-3 form-text">
+        Don't have an account? <router-link to="/register">Register</router-link>
+      </div>
+
+      <div class="text-start d-flex flex-column gap-1 w-100">
+        <button type="submit" class="btn btn-primary">Log In</button>
+        <!-- <button type="submit" class="btn btn-subtle me-2">Cancel</button> -->
       </div>
     </form>
   </div>
