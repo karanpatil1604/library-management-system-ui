@@ -37,7 +37,7 @@
         </div>
         <ul class="dropdown-menu">
           <li><div class="dropdown-item">Register</div></li>
-          <li><div class="dropdown-item">Login</div></li>
+          <li><RouterLink to="/login" class="dropdown-item">Login</RouterLink></li>
           <li><div class="dropdown-item">Profile</div></li>
           <li><hr class="dropdown-divider" /></li>
           <li><div class="dropdown-item">Logout</div></li>

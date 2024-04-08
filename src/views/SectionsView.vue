@@ -3,8 +3,11 @@ import PlaceholderCard from '@/components/Placeholder/PlaceholderCard.vue'
 </script>
 
 <template>
-  <div class="p-2 m-2 w-100">
-    <div class="row d-md-flex row-cols-md-4 gap-2">
+  <div class="p-2 m-2">
+    <div class="w-100 d-md-flex justify-content-end mb-2">
+      <RouterLink to="/" class="btn btn-outline-info">Add Section</RouterLink>
+    </div>
+    <div class="row row-cols-md-4 gy-3 row-cols-2">
       <PlaceholderCard></PlaceholderCard>
       <PlaceholderCard></PlaceholderCard>
       <PlaceholderCard></PlaceholderCard>
@@ -14,10 +17,3 @@ import PlaceholderCard from '@/components/Placeholder/PlaceholderCard.vue'
     </div>
   </div>
 </template>
-
-<style scoped>
-.row {
-  margin: 0;
-  padding: 0;
-}
-</style>
