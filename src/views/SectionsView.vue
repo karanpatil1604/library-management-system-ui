@@ -1,5 +1,5 @@
 <script setup>
-import PlaceholderCard from '@/components/Placeholder/PlaceholderCard.vue'
+import SectionCard from '@/components/Cards/SectionCard.vue'
 </script>
 
 <template>
@@ -8,12 +8,12 @@ import PlaceholderCard from '@/components/Placeholder/PlaceholderCard.vue'
       <RouterLink to="/" class="btn btn-outline-info">Add Section</RouterLink>
     </div>
     <div class="row row-cols-md-4 gy-3 row-cols-2">
-      <PlaceholderCard></PlaceholderCard>
-      <PlaceholderCard></PlaceholderCard>
-      <PlaceholderCard></PlaceholderCard>
-      <PlaceholderCard></PlaceholderCard>
-      <PlaceholderCard></PlaceholderCard>
-      <PlaceholderCard></PlaceholderCard>
+      <SectionCard></SectionCard>
+      <SectionCard></SectionCard>
+      <SectionCard></SectionCard>
+      <SectionCard></SectionCard>
+      <SectionCard></SectionCard>
+      <SectionCard></SectionCard>
     </div>
   </div>
 </template>
