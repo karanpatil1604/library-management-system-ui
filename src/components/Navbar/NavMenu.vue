@@ -23,7 +23,7 @@
         <RouterLink to="/books" class="nav-link">Books</RouterLink>
       </li>
       <li class="nav-item">
-        <div class="nav-link">Users</div>
+        <RouterLink to="/users" class="nav-link">Users</RouterLink>
       </li>
 
       <li class="nav-item dropdown">

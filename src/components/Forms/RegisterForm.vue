@@ -32,7 +32,7 @@
         </div>
       </div>
 
-      <div class="input-group mb-3">
+      <!-- <div class="input-group mb-3">
         <span class="input-group-text">@</span>
         <div class="form-floating">
           <input
@@ -43,7 +43,7 @@
           />
           <label for="floatingInputGroup1">Username</label>
         </div>
-      </div>
+      </div> -->
       <div class="form-floating mb-3">
         <input
           type="email"

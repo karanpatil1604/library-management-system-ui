@@ -8,7 +8,7 @@ function range(start, end) {
 }
 </script>
 <template>
-  <div class="container-fluid mt-2 ms-md-1">
+  <div class="container-fluid mt-2">
     <div class="row">
       <div class="col-md-2 d-md-block text-center items-center vh-100 d-none">
         <div class="w-100 d-md-flex mt-2">
@@ -17,7 +17,7 @@ function range(start, end) {
       </div>
       <div class="col-md-10">
         <div class="row text-center row-cols-md-4 row-cols-2">
-          <div class="col my-2" v-for="i in range(1, 13)" :key="i">
+          <div class="col py-3" v-for="i in range(1, 13)" :key="i">
             <BookCard></BookCard>
           </div>
         </div>
