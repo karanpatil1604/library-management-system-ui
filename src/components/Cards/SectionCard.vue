@@ -11,7 +11,12 @@ import { Button } from 'bootstrap';
           <button class="btn btn-outline-danger col-6">Delete</button>
         </div> -->
         <div class="d-flex justify-content-between">
-          <button class="btn btn-outline-info">
+          <button
+            class="btn btn-outline-info"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#sectionEditFormModal"
+          >
             <i class="bi bi-pencil-square"></i>
           </button>
           <button class="btn btn-outline-danger">

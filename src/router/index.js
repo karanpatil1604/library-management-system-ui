@@ -16,11 +16,10 @@ const router = createRouter({
     },
     {
       path: '/books',
-      name: 'books',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/BooksView.vue')
+      children: [
+        { path: '', component: () => import('@/views/BooksView.vue') },
+        { path: 'new', component: () => import('@/components/Forms/BooksForm.vue') }
+      ]
     },
     {
       path: '/users',

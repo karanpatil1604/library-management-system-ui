@@ -1,6 +1,5 @@
 <script setup>
 import BookCard from '@/components/Cards/BookCard.vue'
-
 function range(start, end) {
   return Array(end - start + 1)
     .fill()
@@ -12,7 +11,7 @@ function range(start, end) {
     <div class="row">
       <div class="col-md-2 d-md-block text-center items-center vh-100 d-none">
         <div class="w-100 d-md-flex mt-2">
-          <RouterLink to="/" class="btn btn-outline-info w-100">+ Add Book</RouterLink>
+          <RouterLink to="/books/new" class="btn btn-outline-info w-100">+ Add Book</RouterLink>
         </div>
       </div>
       <div class="col-md-10">
@@ -21,6 +20,13 @@ function range(start, end) {
             <BookCard></BookCard>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid mt-2">
+    <div class="row">
+      <div class="col-4 offset-4">
+        <RouterView></RouterView>
       </div>
     </div>
   </div>
