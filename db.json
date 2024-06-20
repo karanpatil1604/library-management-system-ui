@@ -1,0 +1,105 @@
+{
+  "books": [
+    {
+      "id": 1,
+      "title": "book 1",
+      "description": "Book 1 Descriptions",
+      "pages": 122,
+      "genre": "comedy",
+      "authors": [
+        {
+          "id": 2,
+          "name": "Author two"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "book 2",
+      "description": "Book 2 Descriptions",
+      "pages": 242,
+      "genre": "sci-fi",
+      "authors": [
+        {
+          "id": 543,
+          "name": "Author some"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "book 3",
+      "description": "Book 3 Descriptions",
+      "pages": 383,
+      "genre": "history",
+      "authors": [
+        {
+          "id": 33,
+          "name": "Author thatithi"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "book 4",
+      "description": "Book 4 Descriptions",
+      "pages": 644,
+      "genre": "textbook",
+      "authors": [
+        {
+          "id": 1,
+          "name": "Author one"
+        }
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": 1,
+      "name": "history"
+    },
+    {
+      "id": 2,
+      "name": "sci-fi"
+    },
+    {
+      "id": 3,
+      "name": "textbook"
+    },
+    {
+      "id": 4,
+      "name": "comedy"
+    },
+    {
+      "id": 1,
+      "name": "story"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "user_one",
+      "role": "student"
+    },
+    {
+      "id": 2,
+      "name": "user-two",
+      "role": "student"
+    },
+    {
+      "id": 3,
+      "name": "librarian-one",
+      "role": "librarian"
+    },
+    {
+      "id": 4,
+      "name": "user-four",
+      "role": "student"
+    },
+    {
+      "id": 5,
+      "name": "user-three",
+      "role": "student"
+    }
+  ]
+}

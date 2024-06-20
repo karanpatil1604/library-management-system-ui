@@ -1,6 +1,17 @@
 <script setup>
+import { onBeforeMount, ref } from 'vue'
 import SectionCard from '@/components/Cards/SectionCard.vue'
 import SectionForm from '@/components/Forms/SectionForm.vue'
+
+const sections = ref([])
+const fetchSections = async () => {
+  sections.value = await fetch('http://localhost:3000/sections')
+    .then((response) => response.json())
+    .then((data) => data)
+  console.log('Ready to fetch sections')
+}
+const currentSection = ref(null)
+onBeforeMount(fetchSections)
 </script>
 
 <template>
@@ -17,12 +28,12 @@ import SectionForm from '@/components/Forms/SectionForm.vue'
       </button>
     </div>
     <div class="row row-cols-md-4 gy-3 row-cols-2">
-      <SectionCard></SectionCard>
-      <SectionCard></SectionCard>
-      <SectionCard></SectionCard>
-      <SectionCard></SectionCard>
-      <SectionCard></SectionCard>
-      <SectionCard></SectionCard>
+      <SectionCard v-for="section in sections" :key="section.id" :section="section"></SectionCard>
+      <!-- <SectionCard></SectionCard> -->
+      <!-- <SectionCard></SectionCard> -->
+      <!-- <SectionCard></SectionCard> -->
+      <!-- <SectionCard></SectionCard> -->
+      <!-- <SectionCard></SectionCard> -->
     </div>
     <div>
       <RouterView></RouterView>

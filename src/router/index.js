@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('../views/SectionsView.vue')
     },
     {
+      path: '/simple-form',
+      name: 'simpleForm',
+      component: () => import('../views/SimpleForm.vue')
+    },
+    {
       path: '/books',
       children: [
         { path: '', component: () => import('@/views/BooksView.vue') },
