@@ -18,7 +18,6 @@ defineProps({
   <label class="form-label">{{ label }}</label>
   <input
     v-bind="$attrs"
-    :placeholder="label"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
   />
