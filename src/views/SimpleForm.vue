@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 import BaseInput from '@/components/Forms/components/BaseInput.vue'
 const categories = ref([
   'sustainability',
@@ -21,6 +21,7 @@ const event = ref({
     music: false
   }
 })
+const submit = ref('submit')
 </script>
 
 <template>
@@ -41,33 +42,68 @@ const event = ref({
 
       <h3>Name & describe your event</h3>
 
-      <BaseInput v-model="event.title" label="Title" type="text" />
-      <BaseInput v-model="event.description" label="Description" type="text" />
-      <BaseInput v-model="event.location" label="Location" type="text" />
+      <BaseInput
+        v-model="event.title"
+        class="form-control py-2 mb-2"
+        label="Title"
+        type="text"
+        floating=""
+      />
+      <BaseInput
+        v-model="event.description"
+        class="form-control py-2 mb-2"
+        label="Description"
+        type="text"
+      />
 
+      <BaseInput
+        v-model="event.location"
+        class="form-control py-2 mb-2"
+        label="Location"
+        type="text"
+      />
       <h3>Are pets allowed?</h3>
-      <div>
-        <input type="radio" v-model="event.pets" :value="1" name="pets" />
-        <label>Yes</label>
-      </div>
-
-      <div>
-        <input type="radio" v-model="event.pets" :value="0" name="pets" />
-        <label>No</label>
+      <div class="row p-0 m-0">
+        <div class="col-3">
+          <BaseInput
+            v-model="event.category"
+            class="form-check-input py-2 mb-2 mx-3"
+            label="Yes"
+            type="radio"
+            name="flexRadioDefault"
+          />
+        </div>
+        <div class="col-3">
+          <BaseInput
+            v-model="event.category"
+            class="form-check-input py-2 mb-2 mx-3"
+            label="No"
+            type="radio"
+            name="flexRadioDefault"
+          />
+        </div>
       </div>
 
       <h3>Extras</h3>
-      <div>
-        <input type="checkbox" v-model="event.extras.catering" class="field" />
-        <label>Catering</label>
+      <div class="row p-0 m-0">
+        <div class="col-3">
+          <BaseInput
+            v-model="event.category"
+            class="form-check-input py-2 mb-2 mx-3"
+            label="Yes"
+            type="checkbox"
+          />
+        </div>
+        <div class="col-3">
+          <BaseInput
+            v-model="event.category"
+            class="form-check-input py-2 mb-2 mx-3"
+            label="No"
+            type="checkbox"
+          />
+        </div>
       </div>
-
-      <div>
-        <input type="checkbox" v-model="event.extras.music" class="field" />
-        <label>Live music</label>
-      </div>
-
-      <button class="button -fill-gradient" type="submit">Submit</button>
+      <BaseInput type="button" class="btn btn-success mt-4" v-model="submit" />
     </form>
   </div>
 </template>

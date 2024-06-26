@@ -1,3 +1,15 @@
+<script setup>
+import { ref } from 'vue'
+import FloatInput from './components/FloatInput.vue'
+
+const register = ref({
+  firstName: '',
+  lastName: '',
+  email: '',
+  passoword: '',
+  confirmPassoword: ''
+})
+</script>
 <template>
   <div class="shadow rounded-1 p-4 mt-4 col-md-6 offset-md-3">
     <div class="mt-2 gy-2">
@@ -7,69 +19,57 @@
     <form class="mt-1 fs-6">
       <div class="row">
         <div class="col-sm-12 col-md-6">
-          <div class="form-floating mb-3">
-            <input
-              type="text"
-              class="form-control"
-              id="firstName"
-              aria-describedby="fnameHelp"
-              placeholder="john"
-            />
-            <label for="firstName">First Name</label>
-          </div>
+          <FloatInput
+            v-model="register.firstName"
+            type="text"
+            class="mb-3"
+            label="First Name"
+            id="firstName"
+          />
         </div>
         <div class="col-sm-12 col-md-6">
           <div class="form-floating mb-3">
-            <input
+            <FloatInput
+              v-model="register.lastName"
               type="text"
-              class="form-control"
+              class="mb-3"
               id="lastName"
+              label="Last Name"
               aria-describedby="lnameHelp"
               placeholder="doe"
             />
-            <label for="lastName">Last Name</label>
           </div>
         </div>
       </div>
-
-      <!-- <div class="input-group mb-3">
-        <span class="input-group-text">@</span>
-        <div class="form-floating">
-          <input
-            type="text"
-            class="form-control fs-6"
-            id="floatingInputGroup1"
-            placeholder="Username"
-          />
-          <label for="floatingInputGroup1">Username</label>
-        </div>
+      <FloatInput
+        v-model="register.email"
+        type="email"
+        id="email"
+        aria-describedby="emailHelp"
+        label="Email Address"
+      />
+      <!-- <div id="emailHelp" class="form-text ms-1">
+        We'll never share your email with anyone else.
       </div> -->
-      <div class="form-floating mb-3">
-        <input
-          type="email"
-          class="form-control"
-          id="email"
-          aria-describedby="emailHelp"
-          placeholder="user@mail.com"
-        />
-        <label for="email">Email address</label>
-        <div id="emailHelp" class="form-text ms-1">
-          We'll never share your email with anyone else.
-        </div>
-      </div>
 
-      <div class="row">
+      <div class="row mt-3">
         <div class="col-sm-12 col-md-6">
-          <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="passwork1" placeholder="kolha#pur09" />
-            <label for="passwork1" class="form-label">Password</label>
-          </div>
+          <FloatInput
+            v-model="register.passoword"
+            type="password"
+            label="Password"
+            id="passoword"
+            class="mb-3"
+          />
         </div>
         <div class="col-sm-12 col-md-6">
-          <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="password2" placeholder="kolha#pur09" />
-            <label for="password2" class="form-label">Confirm Password</label>
-          </div>
+          <FloatInput
+            v-model="register.confirmPassoword"
+            type="password"
+            label="Confirm Password"
+            id="confirmPassword"
+            class="mb-3"
+          />
         </div>
       </div>
 

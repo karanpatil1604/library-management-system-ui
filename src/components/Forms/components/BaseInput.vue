@@ -1,5 +1,9 @@
 <script setup>
 defineProps({
+  floating: {
+    type: Boolean,
+    default: false
+  },
   label: {
     type: String,
     default: ''
@@ -11,9 +15,8 @@ defineProps({
 })
 </script>
 <template>
-  <label class="form-label mt-2">{{ label }}</label>
+  <label class="form-label">{{ label }}</label>
   <input
-    class="field form-control py-2 mb-2"
     v-bind="$attrs"
     :placeholder="label"
     :value="modelValue"
