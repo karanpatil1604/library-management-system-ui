@@ -2,7 +2,7 @@
   <div class="">
     <div class="card" aria-hidden="true">
       <div class="card-header">Section Name</div>
-      <img src="" class="card-img-top w-100" />
+      <img src="@/assets/imgs/600x600.png" class="card-img-top w-100" />
       <div class="card-body">
         <p class="card-title">Book Name is here.</p>
         <p class="card-text">Ratings for the book</p>

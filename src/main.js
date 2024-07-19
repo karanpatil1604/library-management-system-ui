@@ -1,4 +1,6 @@
+import 'primeicons/primeicons.css'
 import './assets/main.css'
+import './assets/base.css'
 import 'bootstrap/css/bootstrap.min.css'
 import 'bootstrap/js/bootstrap.min.js'
 import '../node_modules/bootstrap-icons/font/bootstrap-icons.min.css'

@@ -8,7 +8,7 @@ import NavMenu from '@/components/Navbar/NavMenu.vue'
     <div class="container row">
       <BrandLogo class="col-2 col-md-1 p-md-0 p-xs-1 m-0 ps-md-1 text-md-center" />
       <SearchBar class="col-md-7 col-8" />
-      <NavMenu class=""> </NavMenu>
+      <NavMenu> </NavMenu>
     </div>
   </nav>
 </template>

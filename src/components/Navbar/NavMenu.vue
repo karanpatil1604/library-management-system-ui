@@ -1,53 +1,55 @@
+<script setup>
+import BaseIcon from '@/components/icons/BaseIcon.vue'
+import MenuItems from '@/components/Navbar/MenuItems.vue'
+</script>
+
 <template>
-  <button
-    class="navbar-toggler col-2"
-    type="button"
+  <!-- <BaseIcon
+    class="navbar-toggler rounded border border-secondary col-2 d-md-none m-0 d-none"
+    icon-name="pi pi-bars"
+    icon-text="text-gray-500"
+    icon-b-g="bg-gray-100"
     data-bs-toggle="collapse"
     data-bs-target="#navbarScroll"
     aria-controls="navbarScroll"
     aria-expanded="false"
     aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
+  /> -->
+
+  <BaseIcon
+    class="rounded col-2 d-md-none m-0 me-1 bg-body-tertiary mb-1"
+    icon-name="pi pi-bars"
+    icon-text="text-gray-600"
+    style="font-size: 2rem"
+    data-bs-toggle="offcanvas"
+    data-bs-target="#offcanvasResponsive"
+    aria-controls="offcanvasResponsive"
+  />
+
   <div
+    class="offcanvas-sm offcanvas-end d-md-none"
+    tabindex="-1"
+    id="offcanvasResponsive"
+    aria-labelledby="offcanvasResponsiveLabel"
+  >
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasResponsiveLabel">LMS</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="offcanvas"
+        data-bs-target="#offcanvasResponsive"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="offcanvas-body">
+      <MenuItems />
+    </div>
+  </div>
+
+  <MenuItems
     class="collapse navbar-collapse p-md-0 w-md-100 col-md-5 d-md-flex justify-content-md-end"
     id="navbarScroll"
-  >
-    <ul
-      class="navbar-nav my-md-2 my-lg-0 navbar-nav-scroll z-100"
-      style="--bs-scroll-height: 100px"
-    >
-      <li class="nav-item">
-        <RouterLink to="/" class="nav-link" active-class="active">Dashboard</RouterLink>
-      </li>
-      <li class="nav-item">
-        <RouterLink to="/sections" class="nav-link" active-class="active">Sections</RouterLink>
-      </li>
-      <li class="nav-item">
-        <RouterLink to="/books" class="nav-link" active-class="active">Books</RouterLink>
-      </li>
-      <li class="nav-item">
-        <RouterLink to="/users" class="nav-link" active-class="active">Users</RouterLink>
-      </li>
-
-      <li class="nav-item dropdown">
-        <div
-          class="nav-link dropdown-toggle"
-          role="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          Account
-        </div>
-        <ul class="dropdown-menu">
-          <li><RouterLink to="/register" class="dropdown-item">Register</RouterLink></li>
-          <li><RouterLink to="/login" class="dropdown-item">Login</RouterLink></li>
-          <li><div class="dropdown-item">Profile</div></li>
-          <li><hr class="dropdown-divider" /></li>
-          <li><div class="dropdown-item">Logout</div></li>
-        </ul>
-      </li>
-    </ul>
-  </div>
+    style="position: static"
+  ></MenuItems>
 </template>

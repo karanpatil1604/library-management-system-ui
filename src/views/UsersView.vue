@@ -1,5 +1,6 @@
 <script setup>
 import UserListTable from '@/components/Tables/UserListTable.vue'
+import PaginationMenu from '@/components/Panel/PaginationMenu.vue'
 </script>
 <template>
   <div class="container-fluid mt-2 pt-2">
@@ -10,6 +11,7 @@ import UserListTable from '@/components/Tables/UserListTable.vue'
           <h1 class="fs-2 text-center">Users List</h1>
         </div>
         <UserListTable></UserListTable>
+        <PaginationMenu />
       </div>
     </div>
   </div>
