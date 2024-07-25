@@ -1,75 +1,121 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import AlertService from '@/services/AlertService.js'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 const props = defineProps({
-  id: {
-    type: String,
-    default: 'sectionEditForm'
-  },
-  newSection: {
+  isNew: {
     type: Boolean,
     default: false
   },
-  section: {
-    type: Object,
+  id: {
+    type: String,
     default: null
   }
 })
+const submitButtonText = props.isNew ? ref('Add Section') : ref('Edit Section')
 
-const defaultSection = ref({
-  section_name: 'defaultSection',
-  section_id: '-1'
-})
+const section = ref('')
+const fetchSection = async () => {
+  if (!props.isNew && props.id) {
+    let section_json = await fetch('http://localhost:8000/api/v1/sections/' + props.id)
+      .then((response) => response.json())
+      .then((data) => data)
+    console.log(section_json)
+    section.value = section_json ? section_json.name : ''
+  }
+}
+
+onMounted(fetchSection)
+
+const handleSubmit = async () => {
+  let createOrEditURL = props.isNew
+    ? 'http://localhost:8000/api/v1/sections'
+    : `http://localhost:8000/api/v1/sections/${props.id}`
+  let method = props.isNew ? 'POST' : 'PUT'
+  let response
+  try {
+    response = await fetch(createOrEditURL, {
+      method: method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: section.value })
+    })
+
+    // Check response status and handle accordingly
+    switch (response.status) {
+      case 200: {
+        const data = await response.json()
+        AlertService.showAlert(`Section updated successfully!`, 'info', 3000)
+        section.value = ''
+        router.push('/sections')
+        break
+      }
+      case 201: {
+        const data = await response.json()
+        AlertService.showAlert(`Section: ${data.name} added successfully!`, 'success', 3000)
+        section.value = ''
+        router.push({ name: 'sections' })
+        break
+      }
+      case 400: {
+        const errorData = await response.json()
+        AlertService.showAlert(`Bad Request: ${errorData.message}`, 'danger', 3000)
+        break
+      }
+      case 409: {
+        const errorData = await response.json()
+        AlertService.showAlert(`${errorData.msg}`, 'warning', 3000)
+        break
+      }
+      case 500: {
+        AlertService.showAlert('Internal Server Error. Please try again later.', 'danger', 3000)
+        break
+      }
+      default: {
+        AlertService.showAlert('An unexpected error occurred.', 'danger', 3000)
+        break
+      }
+    }
+  } catch (error) {
+    // Handle network errors or other unexpected errors
+    AlertService.showAlert(
+      'Network error. Please check your connection and try again.',
+      'danger',
+      3000
+    )
+  }
+}
 </script>
 <template>
-  <div
-    class="modal fade"
-    :id="`${props.id}Modal`"
-    tabindex="-1"
-    aria-labelledby="`${props.id}ModalLabel`"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" :id="`${props.id}ModalLabel`">Add new section</h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+  <div>
+    <div class="row mt-4">
+      <div class="offset-4 col-md-4">
+        <div class="row">
+          <h2 v-if="props.isNew">Add New Section</h2>
+          <h2 v-if="!props.isNew">Edit Section</h2>
         </div>
-        <div class="modal-body">
-          <form class="fs-6">
-            <div class="form-floating mb-3">
-              <input
-                type="email"
-                class="form-control"
-                id="floatingInput"
-                placeholder="name@example.com"
-                v-if="props.newSection"
-              />
-              <input
-                type="email"
-                class="form-control"
-                id="floatingInput"
-                placeholder="name@example.com"
-                v-else
-                :value="defaultSection.section_name + defaultSection.section_id"
-              />
-              <label for="floatingInput">Section name</label>
-            </div>
+        <form class="fs-6">
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="floatingInput"
+              placeholder="sectionName"
+              v-model="section"
+            />
+            <label for="floatingInput">Section name</label>
+          </div>
 
-            <div class="text-start d-flex flex-column gap-1 w-100">
-              <button type="button" class="btn btn-primary">Add Section</button>
-              <!-- <button type="submit" class="btn btn-subtle me-2">Cancel</button> -->
-            </div>
-          </form>
-        </div>
-        <!-- <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div> -->
+          <div class="d-flex gap-1 w-100">
+            <button type="button" @click.prevent="handleSubmit" class="btn btn-success">
+              {{ submitButtonText }}
+            </button>
+            <RouterLink to="/sections">
+              <button type="button" class="btn btn-secondary me-2">Cancel</button>
+            </RouterLink>
+          </div>
+        </form>
       </div>
     </div>
   </div>

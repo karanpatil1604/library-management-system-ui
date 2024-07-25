@@ -11,8 +11,27 @@ const router = createRouter({
     },
     {
       path: '/sections',
-      name: 'sections',
-      component: () => import('../views/SectionsView.vue')
+      children: [
+        {
+          path: '',
+          component: () => import('@/views/SectionsView.vue'),
+          name: 'sections'
+        },
+        {
+          path: 'new',
+          component: () => import('@/components/Forms/SectionForm.vue'),
+          props: { isNew: true }
+        },
+        {
+          path: ':id/edit',
+          component: () => import('@/components/Forms/SectionForm.vue'),
+          name: 'sectionEdit',
+          props: (route) => ({
+            isNew: false,
+            id: route.params.id
+          })
+        }
+      ]
     },
     {
       path: '/simple-form',
@@ -33,19 +52,19 @@ const router = createRouter({
     },
     {
       path: '/login',
-      name: 'login',
+      // name: 'login',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import('../views/LoginView.vue'),
+      // component: () => import('@/views/LoginView.vue'),
       children: [
         {
-          path: '/login',
-          component: () => import('../components/Forms/LoginForm.vue')
+          path: '',
+          component: () => import('@/components/Forms/LoginForm.vue')
         },
         {
           path: '/register',
-          component: () => import('../components/Forms/RegisterForm.vue')
+          component: () => import('@/components/Forms/RegisterForm.vue')
         }
       ]
     }

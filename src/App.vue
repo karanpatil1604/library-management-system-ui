@@ -1,5 +1,6 @@
 <script setup>
 import Navbar from '@/components/Navbar/NavBar.vue'
+import FlashMessage from '@/components/Popups/FlashMessage.vue'
 </script>
 
 <template>
@@ -11,6 +12,7 @@ import Navbar from '@/components/Navbar/NavBar.vue'
   <main>
     <RouterView></RouterView>
   </main>
+  <FlashMessage></FlashMessage>
 </template>
 
 <style scoped></style>
