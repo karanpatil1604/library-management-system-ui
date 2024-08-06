@@ -1,5 +1,6 @@
 <script setup>
 import BaseIcon from '@/components/icons/BaseIcon.vue'
+import { isAuthenticated } from '@/services/AuthHelper.js'
 </script>
 
 <template>
@@ -47,7 +48,7 @@ import BaseIcon from '@/components/icons/BaseIcon.vue'
         data-bs-target="#offcanvasResponsive"
         aria-label="Close"
       >
-        <RouterLink to="/login" style="text-decoration: none">
+        <RouterLink v-if="!isAuthenticated()" to="/login" style="text-decoration: none">
           <BaseIcon icon-name="pi pi-user" icon-text="text-orange-700" icon-b-g="bg-orange-200" />
         </RouterLink>
       </button>
@@ -58,7 +59,7 @@ import BaseIcon from '@/components/icons/BaseIcon.vue'
         data-bs-target="#offcanvasResponsive"
         aria-label="Close"
       >
-        <RouterLink to="/login" style="text-decoration: none">
+        <RouterLink v-if="isAuthenticated()" to="/login" style="text-decoration: none">
           <BaseIcon icon-name="pi pi-sign-out" icon-text="text-red-700" icon-b-g="bg-red-200" />
         </RouterLink>
       </button>

@@ -42,20 +42,18 @@ const handleSubmit = async () => {
       body: JSON.stringify({ name: section.value })
     })
 
-    // Check response status and handle accordingly
     switch (response.status) {
       case 200: {
-        const data = await response.json()
         AlertService.showAlert(`Section updated successfully!`, 'info', 3000)
         section.value = ''
-        router.push('/sections')
+        await router.push('/sections')
         break
       }
       case 201: {
         const data = await response.json()
         AlertService.showAlert(`Section: ${data.name} added successfully!`, 'success', 3000)
         section.value = ''
-        router.push({ name: 'sections' })
+        await router.push({ name: 'sections' })
         break
       }
       case 400: {
@@ -78,7 +76,6 @@ const handleSubmit = async () => {
       }
     }
   } catch (error) {
-    // Handle network errors or other unexpected errors
     AlertService.showAlert(
       'Network error. Please check your connection and try again.',
       'danger',

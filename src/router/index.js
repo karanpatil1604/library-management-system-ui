@@ -60,10 +60,13 @@ const router = createRouter({
       children: [
         {
           path: '',
+          name: 'login',
           component: () => import('@/components/Forms/LoginForm.vue')
         },
         {
           path: '/register',
+          name: 'register',
+
           component: () => import('@/components/Forms/RegisterForm.vue')
         }
       ]

@@ -1,10 +1,25 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+
+const book = ref({
+  ISBN: null,
+  title: '',
+  description: '',
+  section: null,
+  author: null,
+  publisher: null,
+  num_pages: 0,
+  due_days: 0,
+  published_date: null
+})
+</script>
 <template>
   <div>
     <div class="row mt-4">
-      <div class="offset-3 col-md-6">
-        <div class="row">
+      <div class="offset-3 col-md-6 shadow p-3 rounded">
+        <div class="row m-2">
           <h2>Add New Book</h2>
+          <hr />
         </div>
 
         <form class="mt-3 fs-6">
@@ -13,6 +28,7 @@
               <div class="mb-3">
                 <label for="bookTitle" class="form-label">Title</label>
                 <input
+                  v-model="book.title"
                   type="text"
                   class="form-control"
                   id="bookTitle"
@@ -25,6 +41,7 @@
               <div class="mb-3">
                 <label for="ISBN" class="form-label">ISBN</label>
                 <input
+                  v-model="book.ISBN"
                   type="text"
                   class="form-control"
                   id="ISBN"
@@ -65,8 +82,8 @@
             <div class="col-md-4">
               <div class="mb-3">
                 <div class="">
-                  <label class="form-label" for="inputGroupSelect01">Section</label>
-                  <select class="form-select" id="inputGroupSelect01">
+                  <label class="form-label" for="selectSection">Section</label>
+                  <select v-model="book.section" class="form-select" id="selectSection">
                     <option selected>Select section...</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -78,8 +95,8 @@
             <div class="col-md-4">
               <div class="mb-3">
                 <div class="">
-                  <label class="form-label" for="inputGroupSelect01">Author</label>
-                  <select class="form-select" id="inputGroupSelect01">
+                  <label class="form-label" for="selectAuthor">Author</label>
+                  <select v-model="book.author" class="form-select" id="selectAuthor">
                     <option selected>Choose authors...</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -91,8 +108,8 @@
             <div class="col-md-4">
               <div class="mb-3">
                 <div class="">
-                  <label class="form-label" for="inputGroupSelect01">Publisher</label>
-                  <select class="form-select" id="inputGroupSelect01">
+                  <label class="form-label" for="selectPublisher">Publisher</label>
+                  <select v-model="book.publisher" class="form-select" id="selectPublisher">
                     <option selected>Choose Publisher...</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -106,20 +123,30 @@
           <div class="row mb-3">
             <div class="col-md-4">
               <div class="mb-2">
-                <label for="passwork1" class="form-label">No. of Pages</label>
-                <input type="number" class="form-control" id="numOfPages" />
+                <label for="numOfPages" class="form-label">No. of Pages</label>
+                <input
+                  v-model="book.num_pages"
+                  type="number"
+                  class="form-control"
+                  id="numOfPages"
+                />
               </div>
             </div>
             <div class="col-md-4">
               <div class="mb-2">
                 <label for="dueTime" class="form-label">Due Days</label>
-                <input type="number" class="form-control" id="dueTime" />
+                <input v-model="book.due_days" type="number" class="form-control" id="dueTime" />
               </div>
             </div>
             <div class="col-md-4">
               <div class="mb-2">
                 <label for="publishedDate" class="form-label">Published Date</label>
-                <input type="date" class="form-control" id="publishedDate" />
+                <input
+                  v-model="book.published_date"
+                  type="date"
+                  class="form-control"
+                  id="publishedDate"
+                />
               </div>
             </div>
           </div>
