@@ -2,7 +2,7 @@
 const props = defineProps(['section', 'isNew'])
 const emits = defineEmits(['delete'])
 const deleteSection = () => {
-  emits('delete', props.section.section_id)
+  emits('delete', props.section.id)
 }
 </script>
 <template>
@@ -17,7 +17,7 @@ const deleteSection = () => {
           <RouterLink
             :to="{
               name: 'sectionEdit',
-              params: { id: section.section_id }
+              params: { id: section.id }
             }"
           >
             <button class="btn btn-outline-info" type="button">

@@ -1,7 +1,8 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import AlertService from '@/services/AlertService.js'
 import { useRouter } from 'vue-router'
+import ApiService from '@/services/ApiService.js'
 
 const router = useRouter()
 const props = defineProps({
@@ -19,15 +20,13 @@ const submitButtonText = props.isNew ? ref('Add Section') : ref('Edit Section')
 const section = ref('')
 const fetchSection = async () => {
   if (!props.isNew && props.id) {
-    let section_json = await fetch('http://localhost:8000/api/v1/sections/' + props.id)
-      .then((response) => response.json())
-      .then((data) => data)
+    let section_json = await ApiService.get('/sections/' + props.id)
     console.log(section_json)
     section.value = section_json ? section_json.name : ''
   }
 }
 
-onMounted(fetchSection)
+onBeforeMount(fetchSection)
 
 const handleSubmit = async () => {
   let createOrEditURL = props.isNew
