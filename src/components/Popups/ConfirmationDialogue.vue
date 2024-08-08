@@ -1,10 +1,13 @@
 <script setup>
-import { ref, defineEmits } from 'vue'
+import { defineEmits } from 'vue'
 
 const props = defineProps({
   visible: {
     type: Boolean,
     default: false
+  },
+  label: {
+    type: String
   }
 })
 
@@ -23,7 +26,7 @@ const cancel = () => emits('cancel')
           <button type="button" class="btn-close" @click="cancel" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p>Are you sure you want to delete this section?</p>
+          <p>Are you sure you want to delete this {{ props.label }}?</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" @click="cancel">Cancel</button>

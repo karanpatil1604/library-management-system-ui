@@ -1,21 +1,46 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue'
 import BookCard from '@/components/Cards/BookCard.vue'
-
-function range(start, end) {
-  return Array(end - start + 1)
-    .fill()
-    .map((_, idx) => start + idx)
-}
+import ApiService from '@/services/ApiService.js'
+import AlertService from '@/services/AlertService.js'
+import ConfirmationDialogue from '@/components/Popups/ConfirmationDialogue.vue'
 
 const books = ref([])
+const bookToDelete = ref(null)
+const showDialogue = ref(false)
 
 const fetchBooks = async () => {
-  books.value = await fetch('http://localhost:8000/api/v1/books')
-    .then((result) => result.json())
-    .then((data) => data)
+  books.value = await ApiService.get('/books')
+  // AlertService.showAlert('Books fetched successfully!', 'info')
 }
 onBeforeMount(fetchBooks)
+
+const deleteBook = async (id) => {
+  try {
+    await ApiService.delete(`/books/${id}`)
+    AlertService.showAlert('Book deleted successfully!', 'success')
+    await fetchBooks()
+  } catch {
+    AlertService.showAlert('Failed to delete the book!', 'danger')
+  }
+}
+const confirmDelete = (bookId) => {
+  bookToDelete.value = bookId
+  showDialogue.value = true
+}
+
+const onConfirm = () => {
+  if (bookToDelete.value) {
+    deleteBook(bookToDelete.value)
+    bookToDelete.value = null
+  }
+  showDialogue.value = false
+}
+
+const onCancel = () => {
+  bookToDelete.value = null
+  showDialogue.value = false
+}
 </script>
 <template>
   <div class="container-fluid mt-2">
@@ -27,8 +52,8 @@ onBeforeMount(fetchBooks)
       </div>
       <div class="col-md-10">
         <div class="row text-center row-cols-md-4 row-cols-2">
-          <div class="col py-3" v-for="book in books" :key="book.book_id">
-            <BookCard :book="book"></BookCard>
+          <div class="col py-3" v-for="book in books" :key="book.id">
+            <BookCard :book="book" @delete="confirmDelete"></BookCard>
           </div>
         </div>
       </div>
@@ -41,5 +66,11 @@ onBeforeMount(fetchBooks)
       </div>
     </div>
   </div>
+  <ConfirmationDialogue
+    label="Book"
+    :visible="showDialogue"
+    @confirm="onConfirm"
+    @cancel="onCancel"
+  ></ConfirmationDialogue>
 </template>
 <style scoped></style>

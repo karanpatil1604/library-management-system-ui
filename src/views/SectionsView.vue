@@ -60,6 +60,7 @@ const onCancel = () => {
       ></SectionCard>
     </div>
     <ConfirmationDialogue
+      label="Section"
       :visible="showDialogue"
       @confirm="onConfirm"
       @cancel="onCancel"

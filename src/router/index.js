@@ -34,15 +34,20 @@ const router = createRouter({
       ]
     },
     {
-      path: '/simple-form',
-      name: 'simpleForm',
-      component: () => import('../views/SimpleForm.vue')
-    },
-    {
       path: '/books',
       children: [
-        { path: '', component: () => import('@/views/BooksView.vue') },
-        { path: 'new', component: () => import('@/components/Forms/BooksForm.vue') }
+        { path: '', component: () => import('@/views/BooksView.vue'), name: 'books' },
+        {
+          path: 'new',
+          component: () => import('@/components/Forms/BooksForm.vue'),
+          props: { isNew: true }
+        },
+        {
+          path: ':id/edit',
+          name: 'bookEdit',
+          component: () => import('@/components/Forms/BooksForm.vue'),
+          props: (route) => ({ isNew: false, id: route.params.id })
+        }
       ]
     },
     {

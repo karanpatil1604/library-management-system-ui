@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(['section', 'isNew'])
+const props = defineProps(['section'])
 const emits = defineEmits(['delete'])
 const deleteSection = () => {
   emits('delete', props.section.id)
@@ -8,7 +8,6 @@ const deleteSection = () => {
 <template>
   <div class="col">
     <div class="card" aria-hidden="true">
-      <!-- <img src="../../assets//imgs/600x600.png" class="card-img-top w-100" /> -->
       <div class="card-header">{{ section.name }}</div>
       <div class="card-body">
         <p class="card-text placeholder-glow">{{ section.books.length }} books</p>

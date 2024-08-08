@@ -1,24 +1,148 @@
 <script setup>
-import { ref } from 'vue'
+import { onBeforeMount, onMounted, ref } from 'vue'
+import AlertService from '@/services/AlertService.js'
+import ApiService from '@/services/ApiService.js'
+import { useRouter } from 'vue-router'
+
+const props = defineProps({
+  isNew: {
+    type: Boolean
+  },
+  id: {
+    type: String,
+    default: null
+  }
+})
+const router = useRouter()
+const sections = ref([])
+const authors = ref([])
+const publishers = ref([])
+
+const fetchSections = async () => {
+  sections.value = await ApiService.get('/sections')
+}
+const fetchAuthors = async () => {
+  authors.value = await ApiService.get('/authors')
+}
+const fetchPublishers = async () => {
+  publishers.value = await ApiService.get('/publishers')
+}
+
+onMounted(() => {
+  fetchSections()
+  fetchAuthors()
+  fetchPublishers()
+})
 
 const book = ref({
   ISBN: null,
   title: '',
   description: '',
-  section: null,
-  author: null,
-  publisher: null,
-  num_pages: 0,
-  due_days: 0,
-  published_date: null
+  section_id: null,
+  authors: [],
+  publishers: [],
+  num_of_pages: 0,
+  due_days: 7,
+  date_published: null
 })
+const editingBook = ref(null)
+const fetchSection = async () => {
+  let book_json = await ApiService.get('/books/' + props.id)
+  console.log(book_json)
+  editingBook.value = book_json ? book_json : null
+  if (book_json) {
+    book.value.ISBN = book_json.ISBN
+    book.value.title = book_json.title
+    book.value.description = book_json.description
+    book.value.section_id = book_json.section_id
+    book.value.publishers = book_json.publishers.map((publisher) => {
+      return publisher.id
+    })
+    book.value.authors = book_json.authors.map((author) => {
+      return author.id
+    })
+    book.value.num_of_pages = book_json.num_of_pages
+    book.value.due_days = book_json.due_time
+    book.value.date_published = book_json.date_published
+  }
+}
+if (!props.isNew && props.id) {
+  onBeforeMount(fetchSection)
+}
+
+const files = ref({
+  content: '',
+  cover_img: ''
+})
+const onFileChange = (event, fileName) => {
+  files.value[fileName] = event.target.files[0]
+}
+
+const getFormData = () => {
+  const formData = new FormData()
+  formData.append('content', files.value.content)
+  formData.append('cover_img', files.value.cover_img)
+
+  formData.append('title', book.value.title)
+  formData.append('ISBN', book.value.ISBN)
+  formData.append('num_of_pages', book.value.num_of_pages)
+  formData.append('date_published', book.value.date_published)
+  formData.append('due_days', book.value.due_days)
+  formData.append('section_id', book.value.section_id)
+  for (const id of book.value.authors) {
+    formData.append('authors', id)
+  }
+  for (const id of book.value.publishers) {
+    formData.append('publishers', id)
+  }
+  return formData
+}
+
+const handleSubmit = async () => {
+  if ((!files.value.content || !files.value.cover_img) && props.isNew) {
+    AlertService.showAlert('Please select both files!', 'warning')
+    return
+  }
+  console.log('Ready to submit form')
+  const formData = getFormData()
+  if (props.isNew) {
+    const response = await ApiService.post('/books', formData)
+    if (response.id) {
+      AlertService.showAlert('Book Created Successfully!', 'info')
+      book.value = {
+        ISBN: null,
+        title: '',
+        description: '',
+        section_id: null,
+        authors: [],
+        publishers: [],
+        num_of_pages: 0,
+        due_days: 7,
+        date_published: null
+      }
+      await router.push({ name: 'books' })
+    } else {
+      AlertService.showAlert('Not CREATED', 'danger')
+    }
+  } else {
+    const response = await ApiService.put('/books/' + props.id, formData)
+    if (response.id) {
+      AlertService.showAlert('Book Updated Successfully!', 'primary')
+      await router.push({ name: 'books' })
+    } else {
+      AlertService.showAlert('Not UPDATED', 'danger')
+    }
+  }
+}
 </script>
+z
 <template>
   <div>
-    <div class="row mt-4">
-      <div class="offset-3 col-md-6 shadow p-3 rounded">
+    <div class="row mt-4 p-0 m-0">
+      <div class="offset-2 col-md-8 shadow p-4 rounded">
         <div class="row m-2">
-          <h2>Add New Book</h2>
+          <h2 v-if="isNew">Add New Book</h2>
+          <h2 v-else>Update Book</h2>
           <hr />
         </div>
 
@@ -54,10 +178,11 @@ const book = ref({
 
           <div class="row">
             <div class="col-sm-12 col-md-6">
-              <label for="bookContent" class="form-label">Cover Image</label>
+              <label for="coverImage" class="form-label">Cover Image</label>
               <div class="input-group mb-3">
                 <input
                   type="file"
+                  @change="onFileChange($event, 'cover_img')"
                   class="form-control"
                   id="coverImage"
                   aria-describedby="coverImageHelp"
@@ -72,6 +197,7 @@ const book = ref({
                   type="file"
                   class="form-control"
                   id="bookContent"
+                  @change="onFileChange($event, 'content')"
                   aria-describedby="bookContentHelp"
                   placeholder="doe"
                 />
@@ -83,49 +209,20 @@ const book = ref({
               <div class="mb-3">
                 <div class="">
                   <label class="form-label" for="selectSection">Section</label>
-                  <select v-model="book.section" class="form-select" id="selectSection">
-                    <option selected>Select section...</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                  <select v-model="book.section_id" class="form-select" id="selectSection">
+                    <option selected readonly="">Select section...</option>
+                    <option v-for="section in sections" :key="section.id" :value="section.id">
+                      {{ section.name }}
+                    </option>
                   </select>
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
-              <div class="mb-3">
-                <div class="">
-                  <label class="form-label" for="selectAuthor">Author</label>
-                  <select v-model="book.author" class="form-select" id="selectAuthor">
-                    <option selected>Choose authors...</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="mb-3">
-                <div class="">
-                  <label class="form-label" for="selectPublisher">Publisher</label>
-                  <select v-model="book.publisher" class="form-select" id="selectPublisher">
-                    <option selected>Choose Publisher...</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row mb-3">
             <div class="col-md-4">
               <div class="mb-2">
                 <label for="numOfPages" class="form-label">No. of Pages</label>
                 <input
-                  v-model="book.num_pages"
+                  v-model="book.num_of_pages"
                   type="number"
                   class="form-control"
                   id="numOfPages"
@@ -138,11 +235,49 @@ const book = ref({
                 <input v-model="book.due_days" type="number" class="form-control" id="dueTime" />
               </div>
             </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <div class="mb-3">
+                <div class="">
+                  <label class="form-label" for="selectAuthor">Authors</label>
+                  <select v-model="book.authors" multiple class="form-select" id="selectAuthor">
+                    <option disabled>--- Choose authors ---</option>
+                    <option v-for="author in authors" :key="author.id" :value="author.id">
+                      {{ author.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-3">
+                <div class="">
+                  <label class="form-label" for="selectPublisher">Publishers</label>
+                  <select
+                    v-model="book.publishers"
+                    multiple
+                    class="form-select"
+                    id="selectPublisher"
+                  >
+                    <option disabled>--- Choose Publisher ---</option>
+                    <option
+                      v-for="publisher in publishers"
+                      :key="publisher.id"
+                      :value="publisher.id"
+                    >
+                      {{ publisher.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
             <div class="col-md-4">
               <div class="mb-2">
                 <label for="publishedDate" class="form-label">Published Date</label>
                 <input
-                  v-model="book.published_date"
+                  v-model="book.date_published"
                   type="date"
                   class="form-control"
                   id="publishedDate"
@@ -152,7 +287,13 @@ const book = ref({
           </div>
 
           <div class="text-start d-flex flex-column gap-1 w-100">
-            <button type="submit" class="btn btn-success">Add Book</button>
+            <button
+              type="button"
+              @click.prevent="handleSubmit"
+              :class="isNew ? 'btn btn-success' : 'btn btn-primary'"
+            >
+              {{ isNew ? 'Add Book' : 'Update Book' }}
+            </button>
           </div>
         </form>
       </div>
