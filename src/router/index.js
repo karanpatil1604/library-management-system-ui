@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
+const isAuthenticated = () => {
+  return !!localStorage.getItem('authToken')
+}
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -56,6 +60,11 @@ const router = createRouter({
       component: () => import('@/views/UsersView.vue')
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('@/views/ProfileView.vue')
+    },
+    {
       path: '/login',
       // name: 'login',
       // route level code-splitting
@@ -66,11 +75,25 @@ const router = createRouter({
         {
           path: '',
           name: 'login',
-          component: () => import('@/components/Forms/LoginForm.vue')
+          component: () => import('@/views/LoginView.vue'),
+          beforeEnter: (to, from, next) => {
+            if (!isAuthenticated()) {
+              next()
+            } else {
+              next({ name: 'home' })
+            }
+          }
         },
         {
           path: '/register',
           name: 'register',
+          beforeEnter: (to, from, next) => {
+            if (!isAuthenticated()) {
+              next()
+            } else {
+              next({ name: 'home' })
+            }
+          },
 
           component: () => import('@/components/Forms/RegisterForm.vue')
         }

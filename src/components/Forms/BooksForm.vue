@@ -138,8 +138,8 @@ const handleSubmit = async () => {
 z
 <template>
   <div>
-    <div class="row mt-4 p-0 m-0">
-      <div class="offset-2 col-md-8 shadow p-4 rounded">
+    <div class="row mt-md-4 p-0 m-0">
+      <div class="offset-md-2 col-md-8 shadow p-md-4 rounded">
         <div class="row m-2">
           <h2 v-if="isNew">Add New Book</h2>
           <h2 v-else>Update Book</h2>

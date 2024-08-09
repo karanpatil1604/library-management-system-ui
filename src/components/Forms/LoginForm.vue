@@ -1,11 +1,33 @@
 <script setup>
 import { ref } from 'vue'
 import FloatInput from './components/FloatInput.vue'
+import ApiService from '@/services/ApiService.js'
+import AlertService from '@/services/AlertService.js'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.js'
 
-const login = ref({
-  email: '',
+const router = useRouter()
+const authStore = useAuthStore()
+
+const credentials = ref({
+  email_or_username: '',
   password: ''
 })
+
+const handleSubmit = async () => {
+  const response = await ApiService.post('/login', credentials.value)
+  console.log(response.token, 'this is response')
+
+  if (response.token) {
+    credentials.value = {
+      email_or_username: '',
+      password: ''
+    }
+    await authStore.initializeUserRole(response.token)
+    AlertService.showAlert('Login successful!', 'info')
+    await router.push({ name: 'home' })
+  }
+}
 </script>
 
 <template>
@@ -15,9 +37,15 @@ const login = ref({
     </div>
     <hr />
     <form class="fs-6">
-      <FloatInput v-model="login.email" class="mb-3" id="loginEmail" label="Email" type="email" />
       <FloatInput
-        v-model="login.password"
+        v-model="credentials.email_or_username"
+        class="mb-3"
+        id="loginEmail"
+        label="Email"
+        type="email"
+      />
+      <FloatInput
+        v-model="credentials.password"
         class="mb-3"
         id="loginPassword"
         label="Password"
@@ -29,12 +57,12 @@ const login = ref({
         <label class="form-check-label" for="exampleCheck1">Remember me</label>
       </div>
       <div class="mb-3 form-text">
-        Don't have an account? <router-link to="/register">Register</router-link>
+        Don't have an account?
+        <router-link to="/register">Register</router-link>
       </div>
 
       <div class="text-start d-flex flex-column gap-1 w-100">
-        <button type="submit" class="btn btn-primary">Log In</button>
-        <!-- <button type="submit" class="btn btn-subtle me-2">Cancel</button> -->
+        <button type="button" @click.prevent="handleSubmit" class="btn btn-primary">Log In</button>
       </div>
     </form>
   </div>

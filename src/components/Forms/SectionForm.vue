@@ -85,8 +85,8 @@ const handleSubmit = async () => {
 </script>
 <template>
   <div>
-    <div class="row mt-4">
-      <div class="offset-4 col-md-4">
+    <div class="row mt-md-4 p-0 m-0">
+      <div class="offset-md-4 col-md-4">
         <div class="row">
           <h2 v-if="props.isNew">Add New Section</h2>
           <h2 v-if="!props.isNew">Edit Section</h2>

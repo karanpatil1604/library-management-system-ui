@@ -1,9 +1,17 @@
 <script setup>
-import { onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import BookCard from '@/components/Cards/BookCard.vue'
 import ApiService from '@/services/ApiService.js'
 import AlertService from '@/services/AlertService.js'
 import ConfirmationDialogue from '@/components/Popups/ConfirmationDialogue.vue'
+import { useAuthStore } from '@/stores/auth.js'
+
+const authStore = useAuthStore()
+const props = defineProps({
+  book: Object
+})
+
+const isAdmin = computed(() => authStore.userRole === 'admin')
 
 const books = ref([])
 const bookToDelete = ref(null)
@@ -45,16 +53,34 @@ const onCancel = () => {
 <template>
   <div class="container-fluid mt-2">
     <div class="row">
-      <div class="col-md-2 d-md-block text-center items-center vh-100 d-none">
+      <div
+        :class="{
+          'col-md-2 d-md-block text-center items-center vh-md-100': isAdmin,
+          'd-none': !isAdmin
+        }"
+      >
         <div class="w-100 d-md-flex mt-2">
           <RouterLink to="/books/new" class="btn btn-outline-info w-100">+ Add Book</RouterLink>
         </div>
       </div>
-      <div class="col-md-10">
-        <div class="row text-center row-cols-md-4 row-cols-2">
-          <div class="col py-3" v-for="book in books" :key="book.id">
-            <BookCard :book="book" @delete="confirmDelete"></BookCard>
-          </div>
+      <div
+        :class="{
+          'col-md-10': isAdmin
+        }"
+      >
+        <div
+          class="row p-0 m-0"
+          :class="{
+            'row-cols-md-4 row-cols-2': isAdmin,
+            'row-cols-md-6': !isAdmin
+          }"
+        >
+          <BookCard
+            v-for="book in books"
+            :key="book.id"
+            :book="book"
+            @delete="confirmDelete"
+          ></BookCard>
         </div>
       </div>
     </div>

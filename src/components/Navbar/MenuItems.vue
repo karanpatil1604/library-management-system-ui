@@ -1,6 +1,18 @@
 <script setup>
 import BaseIcon from '@/components/icons/BaseIcon.vue'
-import { isAuthenticated } from '@/services/AuthHelper.js'
+import { useAuthStore } from '@/stores/auth.js'
+import { useRouter } from 'vue-router'
+import { computed } from 'vue'
+
+const router = useRouter()
+
+const authStore = useAuthStore()
+const userRole = computed(() => authStore.userRole)
+console.log(userRole, 'this is user role')
+const logout = async () => {
+  await authStore.logout()
+  await router.push({ name: 'home' })
+}
 </script>
 
 <template>
@@ -15,13 +27,19 @@ import { isAuthenticated } from '@/services/AuthHelper.js'
         data-bs-target="#offcanvasResponsive"
         aria-label="Close"
       >
-        <RouterLink to="/" class="nav-link" active-class="active">Dashboard</RouterLink>
+        <RouterLink v-if="userRole === 'admin'" to="/" class="nav-link" active-class="active"
+          >Dashboard
+        </RouterLink>
+        <RouterLink v-else to="/books" class="nav-link" active-class="active">
+          <i class="pi pi-home text-slate-600" style="font-size: 2rem"></i>
+        </RouterLink>
       </li>
       <li
         class="nav-item"
         data-bs-dismiss="offcanvas"
         data-bs-target="#offcanvasResponsive"
         aria-label="Close"
+        v-if="userRole === 'admin'"
       >
         <RouterLink to="/sections" class="nav-link" active-class="active">Sections</RouterLink>
       </li>
@@ -31,13 +49,16 @@ import { isAuthenticated } from '@/services/AuthHelper.js'
         data-bs-target="#offcanvasResponsive"
         aria-label="Close"
       >
-        <RouterLink to="/books" class="nav-link" active-class="active">Books</RouterLink>
+        <RouterLink to="/books" class="nav-link text-dark-emphasis" active-class="active"
+          >Books
+        </RouterLink>
       </li>
       <li
         class="nav-item"
         data-bs-dismiss="offcanvas"
         data-bs-target="#offcanvasResponsive"
         aria-label="Close"
+        v-if="userRole === 'admin'"
       >
         <RouterLink to="/users" class="nav-link" active-class="active">Subscribers</RouterLink>
       </li>
@@ -48,7 +69,10 @@ import { isAuthenticated } from '@/services/AuthHelper.js'
         data-bs-target="#offcanvasResponsive"
         aria-label="Close"
       >
-        <RouterLink v-if="!isAuthenticated()" to="/login" style="text-decoration: none">
+        <RouterLink v-if="!userRole" to="/login" style="text-decoration: none">
+          <BaseIcon icon-name="pi pi-user" icon-text="text-orange-700" icon-b-g="bg-orange-200" />
+        </RouterLink>
+        <RouterLink v-else-if="userRole" to="/profile" style="text-decoration: none">
           <BaseIcon icon-name="pi pi-user" icon-text="text-orange-700" icon-b-g="bg-orange-200" />
         </RouterLink>
       </button>
@@ -58,10 +82,10 @@ import { isAuthenticated } from '@/services/AuthHelper.js'
         data-bs-dismiss="offcanvas"
         data-bs-target="#offcanvasResponsive"
         aria-label="Close"
+        v-if="userRole"
+        @click="logout"
       >
-        <RouterLink v-if="isAuthenticated()" to="/login" style="text-decoration: none">
-          <BaseIcon icon-name="pi pi-sign-out" icon-text="text-red-700" icon-b-g="bg-red-200" />
-        </RouterLink>
+        <BaseIcon icon-name="pi pi-sign-out" icon-text="text-red-700" icon-b-g="bg-red-200" />
       </button>
     </ul>
   </div>

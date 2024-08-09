@@ -4,7 +4,7 @@ const state = reactive({
   messages: []
 })
 
-const showAlert = (message, type = 'info', duration = 3000) => {
+const showAlert = (message, type = 'info', duration = 5000) => {
   state.messages.push({ message, type, duration })
   setTimeout(() => {
     state.messages.shift()
