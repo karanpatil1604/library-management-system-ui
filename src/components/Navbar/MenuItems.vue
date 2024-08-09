@@ -8,7 +8,6 @@ const router = useRouter()
 
 const authStore = useAuthStore()
 const userRole = computed(() => authStore.userRole)
-console.log(userRole, 'this is user role')
 const logout = async () => {
   await authStore.logout()
   await router.push({ name: 'home' })
@@ -31,7 +30,8 @@ const logout = async () => {
           >Dashboard
         </RouterLink>
         <RouterLink v-else to="/books" class="nav-link" active-class="active">
-          <i class="pi pi-home text-slate-600" style="font-size: 2rem"></i>
+          <!--          <i class="pi pi-home text-slate-600" style="font-size: 2rem"></i>-->
+          Home
         </RouterLink>
       </li>
       <li
@@ -48,10 +48,39 @@ const logout = async () => {
         data-bs-dismiss="offcanvas"
         data-bs-target="#offcanvasResponsive"
         aria-label="Close"
+        v-if="userRole === 'admin'"
       >
         <RouterLink to="/books" class="nav-link text-dark-emphasis" active-class="active"
           >Books
         </RouterLink>
+      </li>
+      <li
+        class="nav-item"
+        data-bs-dismiss="offcanvas"
+        data-bs-target="#offcanvasResponsive"
+        aria-label="Close"
+        v-if="userRole === 'consumer'"
+      >
+        <RouterLink to="/" class="nav-link" active-class="active">My Books</RouterLink>
+      </li>
+      <li
+        class="nav-item"
+        data-bs-dismiss="offcanvas"
+        data-bs-target="#offcanvasResponsive"
+        aria-label="Close"
+        v-if="userRole === 'consumer'"
+      >
+        <RouterLink to="/" class="nav-link" active-class="active">My Requests</RouterLink>
+      </li>
+
+      <li
+        class="nav-item"
+        data-bs-dismiss="offcanvas"
+        data-bs-target="#offcanvasResponsive"
+        aria-label="Close"
+        v-if="userRole === 'admin'"
+      >
+        <RouterLink to="/users" class="nav-link" active-class="active">Requests</RouterLink>
       </li>
       <li
         class="nav-item"

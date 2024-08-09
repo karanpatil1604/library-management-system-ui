@@ -1,5 +1,6 @@
 <script setup>
 import Navbar from '@/components/Navbar/NavBar.vue'
+import { ref } from 'vue'
 import FlashMessage from '@/components/Popups/FlashMessage.vue'
 </script>
 

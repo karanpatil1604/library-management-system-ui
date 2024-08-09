@@ -1,14 +1,17 @@
 <script setup>
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, ref, watch } from 'vue'
 import BookCard from '@/components/Cards/BookCard.vue'
 import ApiService from '@/services/ApiService.js'
 import AlertService from '@/services/AlertService.js'
 import ConfirmationDialogue from '@/components/Popups/ConfirmationDialogue.vue'
 import { useAuthStore } from '@/stores/auth.js'
+import { useRoute } from 'vue-router'
 
 const authStore = useAuthStore()
+const route = useRoute()
 const props = defineProps({
-  book: Object
+  book: Object,
+  query: String
 })
 
 const isAdmin = computed(() => authStore.userRole === 'admin')
@@ -16,9 +19,16 @@ const isAdmin = computed(() => authStore.userRole === 'admin')
 const books = ref([])
 const bookToDelete = ref(null)
 const showDialogue = ref(false)
-
+watch(
+  () => route.query.q,
+  async (newQuery) => {
+    books.value = await ApiService.get(`/search?q=${newQuery}`)
+  },
+  { immediate: true }
+)
 const fetchBooks = async () => {
   books.value = await ApiService.get('/books')
+
   // AlertService.showAlert('Books fetched successfully!', 'info')
 }
 onBeforeMount(fetchBooks)
