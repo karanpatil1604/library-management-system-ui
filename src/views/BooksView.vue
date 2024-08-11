@@ -6,6 +6,7 @@ import AlertService from '@/services/AlertService.js'
 import ConfirmationDialogue from '@/components/Popups/ConfirmationDialogue.vue'
 import { useAuthStore } from '@/stores/auth.js'
 import { useRoute } from 'vue-router'
+import BaseInput from '@/components/Forms/components/BaseInput.vue'
 
 const authStore = useAuthStore()
 const route = useRoute()
@@ -62,6 +63,7 @@ const onCancel = () => {
 </script>
 <template>
   <div class="container-fluid mt-2">
+    <h4 v-if="route.query.q && !isAdmin">Search Results...</h4>
     <div class="row">
       <div
         :class="{
@@ -72,6 +74,12 @@ const onCancel = () => {
         <div class="w-100 d-md-flex mt-2">
           <RouterLink to="/books/new" class="btn btn-outline-info w-100">+ Add Book</RouterLink>
         </div>
+        <div class="d-flex flex-column mt-3">
+          <p>
+            <label>section 1</label>
+            <base-input type="checkbox"></base-input>
+          </p>
+        </div>
       </div>
       <div
         :class="{
@@ -79,7 +87,7 @@ const onCancel = () => {
         }"
       >
         <div
-          class="row p-0 m-0"
+          class="row p-0 m-0 g-2"
           :class="{
             'row-cols-md-4 row-cols-2': isAdmin,
             'row-cols-md-6': !isAdmin
@@ -101,11 +109,14 @@ const onCancel = () => {
         <RouterView></RouterView>
       </div>
     </div>
+    <h2 v-if="books.length === 0" class="text-center">No books found</h2>
   </div>
   <ConfirmationDialogue
-    label="Book"
+    message="Are you sure you want to delete the Book?"
     :visible="showDialogue"
     @confirm="onConfirm"
+    confirm-button="Delete"
+    button-class="danger"
     @cancel="onCancel"
   ></ConfirmationDialogue>
 </template>

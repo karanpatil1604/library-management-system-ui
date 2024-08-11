@@ -6,8 +6,17 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  label: {
-    type: String
+  message: {
+    type: String,
+    default: 'Are you sure?'
+  },
+  confirmButton: {
+    type: String,
+    default: 'Yes'
+  },
+  buttonClass: {
+    type: String,
+    default: 'Yes'
   }
 })
 
@@ -26,11 +35,13 @@ const cancel = () => emits('cancel')
           <button type="button" class="btn-close" @click="cancel" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p>Are you sure you want to delete this {{ props.label }}?</p>
+          <p>{{ props.message }}</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" @click="cancel">Cancel</button>
-          <button type="button" class="btn btn-danger" @click="confirm">Delete</button>
+          <button type="button" :class="'btn btn-' + buttonClass" @click="confirm">
+            {{ props.confirmButton }}
+          </button>
         </div>
       </div>
     </div>

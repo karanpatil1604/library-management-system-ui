@@ -51,6 +51,12 @@ const router = createRouter({
           name: 'bookEdit',
           component: () => import('@/components/Forms/BooksForm.vue'),
           props: (route) => ({ isNew: false, id: route.params.id })
+        },
+        {
+          path: ':id',
+          name: 'bookDetail',
+          component: () => import('@/views/BookDetail.vue'),
+          props: (route) => ({ id: route.params.id })
         }
       ]
     },

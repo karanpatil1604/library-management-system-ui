@@ -4,6 +4,7 @@ import { ref } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(null)
+  const user = ref({ id: null, username: null, email: null })
   const userRole = ref(null)
 
   const initializeUserRole = async (newToken) => {
@@ -19,6 +20,9 @@ export const useAuthStore = defineStore('auth', () => {
   const getUserRole = async (token) => {
     try {
       const decodedToken = jwtDecode(token)
+      user.value.id = decodedToken.user_id
+      user.value.username = decodedToken.username
+      user.value.email = decodedToken.email
       return decodedToken.role // Assuming 'role' is the key in the token payload
     } catch (error) {
       console.error('Failed to decode token', error)
@@ -33,5 +37,5 @@ export const useAuthStore = defineStore('auth', () => {
       await logout()
     }
   }
-  return { userRole, checkLoggedIn, logout, initializeUserRole }
+  return { user, userRole, checkLoggedIn, logout, initializeUserRole }
 })

@@ -3,6 +3,7 @@ import { onBeforeMount, onMounted, ref } from 'vue'
 import AlertService from '@/services/AlertService.js'
 import ApiService from '@/services/ApiService.js'
 import { useRouter } from 'vue-router'
+import { getImageUrl } from '@/services/ImageService.js'
 
 const props = defineProps({
   isNew: {
@@ -37,16 +38,17 @@ onMounted(() => {
 const book = ref({
   ISBN: null,
   title: '',
-  description: '',
-  section_id: null,
-  authors: [],
-  publishers: [],
+  summary: '',
   num_of_pages: 0,
+  rent: 0,
   due_days: 7,
-  date_published: null
+  section_id: null,
+  date_published: null,
+  authors: [],
+  publishers: []
 })
 const editingBook = ref(null)
-const fetchSection = async () => {
+const fetchBook = async () => {
   let book_json = await ApiService.get('/books/' + props.id)
   console.log(book_json)
   editingBook.value = book_json ? book_json : null
@@ -63,11 +65,13 @@ const fetchSection = async () => {
     })
     book.value.num_of_pages = book_json.num_of_pages
     book.value.due_days = book_json.due_time
-    book.value.date_published = book_json.date_published
+    book.value.date_published = book_json.date_published.split(' ')[0]
+    book.value.summary = book_json.summary
+    book.value.rent = book_json.rent
   }
 }
 if (!props.isNew && props.id) {
-  onBeforeMount(fetchSection)
+  onBeforeMount(fetchBook)
 }
 
 const files = ref({
@@ -85,6 +89,8 @@ const getFormData = () => {
 
   formData.append('title', book.value.title)
   formData.append('ISBN', book.value.ISBN)
+  formData.append('rent', book.value.rent)
+  formData.append('summary', book.value.summary)
   formData.append('num_of_pages', book.value.num_of_pages)
   formData.append('date_published', book.value.date_published)
   formData.append('due_days', book.value.due_days)
@@ -189,6 +195,10 @@ z
                   aria-label="upload cover"
                 />
               </div>
+              <p v-if="!isNew">
+                Current Img:
+                <a :href="getImageUrl(editingBook.cover_img)" target="_blank">cover img</a>
+              </p>
             </div>
             <div class="col-sm-12 col-md-6">
               <label for="bookContent" class="form-label">Book Content</label>
@@ -202,6 +212,10 @@ z
                   placeholder="doe"
                 />
               </div>
+              <p v-if="!isNew">
+                Book Content:
+                <a :href="getImageUrl(editingBook.content)" target="_blank">Open Book</a>
+              </p>
             </div>
           </div>
           <div class="row">
@@ -237,44 +251,68 @@ z
             </div>
           </div>
 
-          <div class="row mb-3">
-            <div class="col-md-4">
-              <div class="mb-3">
-                <div class="">
-                  <label class="form-label" for="selectAuthor">Authors</label>
-                  <select v-model="book.authors" multiple class="form-select" id="selectAuthor">
-                    <option disabled>--- Choose authors ---</option>
-                    <option v-for="author in authors" :key="author.id" :value="author.id">
-                      {{ author.name }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="mb-3">
-                <div class="">
-                  <label class="form-label" for="selectPublisher">Publishers</label>
-                  <select
-                    v-model="book.publishers"
-                    multiple
-                    class="form-select"
-                    id="selectPublisher"
+          <div class="row mb-3 align-items-center">
+            <div class="col-md-3">
+              <div class="">
+                <div class="dropdown">
+                  <button
+                    class="btn btn-outline-secondary dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
                   >
-                    <option disabled>--- Choose Publisher ---</option>
-                    <option
-                      v-for="publisher in publishers"
-                      :key="publisher.id"
-                      :value="publisher.id"
-                    >
-                      {{ publisher.name }}
-                    </option>
-                  </select>
+                    Authors
+                  </button>
+                  <ul class="dropdown-menu bg-teal-50">
+                    <li class="dropdown-item" v-for="author in authors" :key="author.id">
+                      <input
+                        class="form-check-input me-1"
+                        type="checkbox"
+                        :value="author.id"
+                        v-model="book.authors"
+                      />
+                      <label class="form-check-label" for="firstCheckbox">{{ author.name }}</label>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
-              <div class="mb-2">
+            <div class="col-md-3">
+              <div class="">
+                <div class="dropdown">
+                  <button
+                    class="btn btn-outline-secondary dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Publishers
+                  </button>
+                  <ul class="dropdown-menu bg-teal-50">
+                    <li class="dropdown-item" v-for="publisher in publishers" :key="publisher.id">
+                      <input
+                        class="form-check-input me-1"
+                        type="checkbox"
+                        :value="publisher.id"
+                        v-model="book.publishers"
+                      />
+                      <label class="form-check-label" for="firstCheckbox">{{
+                        publisher.name
+                      }}</label>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3 d-flex flex-column gap-1">
+              <div>
+                <label for="rent" class="form-label">Rent</label>
+                <input v-model="book.rent" type="number" class="form-control" id="rent" />
+              </div>
+            </div>
+            <div class="col-md-3 d-flex flex-column gap-1">
+              <div class="">
                 <label for="publishedDate" class="form-label">Published Date</label>
                 <input
                   v-model="book.date_published"
@@ -285,7 +323,12 @@ z
               </div>
             </div>
           </div>
-
+          <div>
+            <div class="mb-2">
+              <label for="summary" class="form-label">Summary</label>
+              <textarea v-model="book.summary" rows="8" class="form-control" id="summary" />
+            </div>
+          </div>
           <div class="text-start d-flex flex-column gap-1 w-100">
             <button
               type="button"

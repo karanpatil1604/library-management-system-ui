@@ -60,9 +60,11 @@ const onCancel = () => {
       ></SectionCard>
     </div>
     <ConfirmationDialogue
-      label="Section"
+      message="Are you sure you want to delete the Section?"
       :visible="showDialogue"
       @confirm="onConfirm"
+      confirm-button="Delete"
+      button-class="danger"
       @cancel="onCancel"
     ></ConfirmationDialogue>
     <div>

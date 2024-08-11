@@ -15,7 +15,8 @@ class ApiService {
       })
       return response.data
     } catch (error) {
-      this.handleError(error)
+      return error.response
+      // this.handleError(error)
     }
   }
 
