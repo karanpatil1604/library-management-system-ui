@@ -48,7 +48,12 @@ const fetchBook = async () => {
 }
 const fetchRequests = async () => {
   requestsByUser.value = await ApiService.get(`/requests?user_id=${props.id}&status=requested`)
-  if (props.id in requestsByUser.value.map((issue) => issue.book.id)) {
+  if (
+    props.id in
+    requestsByUser.value
+      .filter((request) => request.user.id == useAuth.user.id)
+      .map((issue) => issue.book.id)
+  ) {
     isRequested.value = true
   }
 }
@@ -58,13 +63,6 @@ onBeforeMount(() => {
   fetchRequests()
 })
 const isRequested = ref(false)
-//   if (userId)
-// })
-// onMounted(() => {
-//   if (book.value.users.some((user) => user.id === userId)) {
-//     isRequested.value = true
-//   }
-// })
 </script>
 
 <template>
@@ -87,7 +85,8 @@ const isRequested = ref(false)
           <div>
             <h1>{{ book.title }}</h1>
             <p>
-              By: <span v-for="author in book.authors">{{ author.name + ' ' }}</span>
+              By:
+              <span v-for="author in book.authors" :key="author.id">{{ author.name + ' ' }}</span>
             </p>
           </div>
 
@@ -97,7 +96,7 @@ const isRequested = ref(false)
             </div>
             <div>
               <span>
-                Rent $: <stron>{{ book.rent }}</stron>
+                Rent $: <strong>{{ book.rent }}</strong>
               </span>
             </div>
             <div

@@ -4,6 +4,8 @@
 
 <script>
 import { Bar } from 'vue-chartjs'
+import { ref } from 'vue'
+
 import {
   Chart as ChartJS,
   Title,
@@ -13,7 +15,13 @@ import {
   CategoryScale,
   LinearScale
 } from 'chart.js/auto'
+import ApiService from '@/services/ApiService.js'
+import { onMounted } from 'vue'
 
+const booksBySection = ref([])
+onMounted(async () => {
+  booksBySection.value = await ApiService.get('/books_by_section')
+})
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 export default {
@@ -22,8 +30,8 @@ export default {
   data() {
     return {
       chartData: {
-        labels: ['January', 'February', 'March', 'April'],
-        datasets: [{ data: [40, 20, 12, 14] }]
+        labels: booksBySection.value.map((section) => section.name),
+        datasets: [{ data: booksBySection.value.map((section) => section.count) }]
       },
       chartOptions: {
         responsive: true

@@ -1,8 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { jwtDecode } from 'jwt-decode'
 
 const isAuthenticated = () => {
   return !!localStorage.getItem('authToken')
+}
+const isAdmin = () => {
+  return jwtDecode(localStorage.getItem('authToken')).role === 'admin'
 }
 
 const router = createRouter({
@@ -11,7 +15,24 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      beforeEnter: (to, from, next) => {
+        if (isAuthenticated() && isAdmin()) {
+          next()
+        } else {
+          next({ name: 'books' })
+        }
+      }
+    },
+    {
+      path: '/requests',
+      children: [
+        {
+          path: '',
+          component: () => import('@/views/RequestsView.vue'),
+          name: 'requests'
+        }
+      ]
     },
     {
       path: '/sections',
@@ -40,17 +61,36 @@ const router = createRouter({
     {
       path: '/books',
       children: [
-        { path: '', component: () => import('@/views/BooksView.vue'), name: 'books' },
+        {
+          path: '',
+          component: () => import('@/views/BooksView.vue'),
+          name: 'books',
+          props: null
+        },
         {
           path: 'new',
           component: () => import('@/components/Forms/BooksForm.vue'),
-          props: { isNew: true }
+          props: { isNew: true },
+          beforeEnter: (to, from, next) => {
+            if (isAdmin()) {
+              next()
+            } else {
+              next({ name: 'login' })
+            }
+          }
         },
         {
           path: ':id/edit',
           name: 'bookEdit',
           component: () => import('@/components/Forms/BooksForm.vue'),
-          props: (route) => ({ isNew: false, id: route.params.id })
+          props: (route) => ({ isNew: false, id: route.params.id }),
+          beforeEnter: (to, from, next) => {
+            if (isAdmin()) {
+              next()
+            } else {
+              next({ name: 'login' })
+            }
+          }
         },
         {
           path: ':id',
@@ -68,7 +108,14 @@ const router = createRouter({
     {
       path: '/profile',
       name: 'profile',
-      component: () => import('@/views/ProfileView.vue')
+      component: () => import('@/views/ProfileView.vue'),
+      beforeEnter: (to, from, next) => {
+        if (!isAuthenticated()) {
+          next()
+        } else {
+          next({ name: 'login' })
+        }
+      }
     },
     {
       path: '/login',

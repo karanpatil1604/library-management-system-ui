@@ -11,8 +11,8 @@ const props = defineProps(['title', 'stat', 'icon', 'tag', 'strong', 'iconBg'])
         </div>
         <slot name="icon"></slot>
       </div>
-      <span class="text-success fw-medium">{{ props.strong }} </span>
-      <span class="text-secondary"> {{ ' ' + props.tag }}</span>
+      <!--      <span class="text-success fw-medium">{{ props.strong }} </span>-->
+      <!--      <span class="text-secondary"> {{ ' ' + props.tag }}</span>-->
     </div>
   </div>
 </template>

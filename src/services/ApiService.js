@@ -2,7 +2,13 @@ import axios from 'axios'
 
 class ApiService {
   constructor(baseURL) {
-    this.client = axios.create({ baseURL })
+    const token = localStorage.getItem('authToken')
+    this.client = axios.create({
+      baseURL,
+      headers: {
+        Authorization: token ? `Bearer ${token}` : ''
+      }
+    })
   }
 
   async request(method, url, data = null, params = null) {

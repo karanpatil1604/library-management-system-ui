@@ -17,9 +17,27 @@ const props = defineProps({
 
 const isAdmin = computed(() => authStore.userRole === 'admin')
 
+const sections = ref([])
+
 const books = ref([])
 const bookToDelete = ref(null)
 const showDialogue = ref(false)
+const filteredBooks = computed(() => {
+  if (selectedFilters.value.length === 0) return books.value
+
+  return books.value.filter((book) =>
+    selectedFilters.value.every((section) => book.section_id == section)
+  )
+})
+const selectedFilters = ref([])
+watch(
+  selectedFilters,
+  () => {
+    // Logic for filtering books based on selected filters
+  },
+  { immediate: true }
+)
+
 watch(
   () => route.query.q,
   async (newQuery) => {
@@ -27,12 +45,20 @@ watch(
   },
   { immediate: true }
 )
+
+const fetchSections = async () => {
+  sections.value = await ApiService.get('/sections')
+  console.log('Ready to fetch sections')
+}
 const fetchBooks = async () => {
   books.value = await ApiService.get('/books')
 
   // AlertService.showAlert('Books fetched successfully!', 'info')
 }
-onBeforeMount(fetchBooks)
+onBeforeMount(() => {
+  fetchBooks()
+  fetchSections()
+})
 
 const deleteBook = async (id) => {
   try {
@@ -75,9 +101,9 @@ const onCancel = () => {
           <RouterLink to="/books/new" class="btn btn-outline-info w-100">+ Add Book</RouterLink>
         </div>
         <div class="d-flex flex-column mt-3">
-          <p>
-            <label>section 1</label>
-            <base-input type="checkbox"></base-input>
+          <p v-for="section in sections" :key="section">
+            <label :for="section">{{ section.name }}</label>
+            <base-input type="checkbox" :id="section" v-model="selectedFilters"></base-input>
           </p>
         </div>
       </div>

@@ -12,6 +12,8 @@ const logout = async () => {
   await authStore.logout()
   await router.push({ name: 'home' })
 }
+
+const userId = computed(() => authStore.user.id)
 </script>
 
 <template>
@@ -41,7 +43,9 @@ const logout = async () => {
         aria-label="Close"
         v-if="userRole === 'admin'"
       >
-        <RouterLink to="/sections" class="nav-link" active-class="active">Sections</RouterLink>
+        <RouterLink :to="{ name: 'sections' }" class="nav-link" active-class="active"
+          >Sections
+        </RouterLink>
       </li>
       <li
         class="nav-item"
@@ -50,10 +54,14 @@ const logout = async () => {
         aria-label="Close"
         v-if="userRole === 'admin'"
       >
-        <RouterLink to="/books" class="nav-link text-dark-emphasis" active-class="active"
+        <RouterLink
+          :to="{ name: 'books' }"
+          class="nav-link text-dark-emphasis"
+          active-class="active"
           >Books
         </RouterLink>
       </li>
+
       <li
         class="nav-item"
         data-bs-dismiss="offcanvas"
@@ -61,16 +69,9 @@ const logout = async () => {
         aria-label="Close"
         v-if="userRole === 'consumer'"
       >
-        <RouterLink to="/" class="nav-link" active-class="active">My Books</RouterLink>
-      </li>
-      <li
-        class="nav-item"
-        data-bs-dismiss="offcanvas"
-        data-bs-target="#offcanvasResponsive"
-        aria-label="Close"
-        v-if="userRole === 'consumer'"
-      >
-        <RouterLink to="/" class="nav-link" active-class="active">My Requests</RouterLink>
+        <RouterLink :to="{ name: 'requests' }" class="nav-link" active-class="active"
+          >My Requests
+        </RouterLink>
       </li>
 
       <li
@@ -80,17 +81,11 @@ const logout = async () => {
         aria-label="Close"
         v-if="userRole === 'admin'"
       >
-        <RouterLink to="/users" class="nav-link" active-class="active">Requests</RouterLink>
+        <RouterLink :to="{ name: 'requests' }" class="nav-link" active-class="active"
+          >Requests
+        </RouterLink>
       </li>
-      <li
-        class="nav-item"
-        data-bs-dismiss="offcanvas"
-        data-bs-target="#offcanvasResponsive"
-        aria-label="Close"
-        v-if="userRole === 'admin'"
-      >
-        <RouterLink to="/users" class="nav-link" active-class="active">Subscribers</RouterLink>
-      </li>
+
       <button
         class="nav-item"
         style="border: none; background: none"
